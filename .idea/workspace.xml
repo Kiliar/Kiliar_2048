@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d9d650f5-68ca-43d1-9e0d-543e00510519" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.babelrc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/_index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app-new.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +22,38 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="2" />
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="redo_2020" />
+                    <option name="lastUsedInstant" value="1607101689" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="master" />
+                    <option name="lastUsedInstant" value="1607101688" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
   </component>
   <component name="ProjectId" id="1XuJnG8UWELewCWiyt2FPP5CffK" />
   <component name="ProjectLevelVcsManager">
@@ -34,13 +61,13 @@
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="javascript.nodejs.core.library.configured.version" value="8.10.0" />
+    <property name="javascript.nodejs.core.library.configured.version" value="10.23.0" />
+    <property name="javascript.nodejs.core.library.typings.version" value="10.17.48" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -52,8 +79,14 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="npm.run">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.start">
     <configuration name="app.js" type="MongoRunConfiguration" factoryName="Mongo" temporary="true">
       <module name="test01" />
       <setting name="path" value="$PROJECT_DIR$/app.js" />
@@ -80,17 +113,30 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Node.js._index.js" />
       <item itemvalue="npm.run" />
+      <item itemvalue="npm.start" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start" />
         <item itemvalue="npm.run" />
         <item itemvalue="Node.js._index.js" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="StructureViewFactory">
     <option name="ACTIVE_ACTIONS" value=",SHOW_FIELDS,HIDE_INHERITED_FROM_OBJECT,SHOW_INHERITED" />
   </component>
@@ -116,6 +162,8 @@
       <workItem from="1582729151507" duration="10282000" />
       <workItem from="1582882542446" duration="7000" />
       <workItem from="1583401465690" duration="1240000" />
+      <workItem from="1607095308118" duration="2830000" />
+      <workItem from="1607099643498" duration="2046000" />
     </task>
     <servers />
   </component>
@@ -129,76 +177,6 @@
     </todo-panel>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="651" y="260" width="659" height="558" key="#app.js" timestamp="1581966825003">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="651" y="260" width="659" height="558" key="#app.js/51.28.1869.1052@51.28.1869.1052" timestamp="1581966825003" />
-    <state x="443" y="193" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1581897321977">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="443" y="193" key="#com.intellij.execution.impl.EditConfigurationsDialog/51.28.1869.1052@51.28.1869.1052" timestamp="1581897321977" />
-    <state x="651" y="260" width="659" height="558" key="#index.js" timestamp="1581966802874">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="651" y="260" width="659" height="558" key="#index.js/51.28.1869.1052@51.28.1869.1052" timestamp="1581966802874" />
-    <state x="651" y="234" width="659" height="610" key="#run" timestamp="1581966893178">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="651" y="234" width="659" height="610" key="#run/51.28.1869.1052@51.28.1869.1052" timestamp="1581966893178" />
-    <state width="1322" height="510" key="GridCell.Tab.0.bottom" timestamp="1582738245565">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state width="1322" height="510" key="GridCell.Tab.0.bottom/1920.0.1920.1080/51.28.1869.1052@51.28.1869.1052" timestamp="1582738245565" />
-    <state width="865" height="146" key="GridCell.Tab.0.bottom/51.28.1869.1052/1920.0.1920.1080@1920.0.1920.1080" timestamp="1582273617936" />
-    <state width="865" height="146" key="GridCell.Tab.0.bottom/51.28.1869.1052/1920.0.1920.1080@51.28.1869.1052" timestamp="1582227826250" />
-    <state width="1495" height="259" key="GridCell.Tab.0.bottom/51.28.1869.1052@51.28.1869.1052" timestamp="1581977653201" />
-    <state width="1322" height="510" key="GridCell.Tab.0.center" timestamp="1582738245565">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state width="1322" height="510" key="GridCell.Tab.0.center/1920.0.1920.1080/51.28.1869.1052@51.28.1869.1052" timestamp="1582738245565" />
-    <state width="865" height="146" key="GridCell.Tab.0.center/51.28.1869.1052/1920.0.1920.1080@1920.0.1920.1080" timestamp="1582273617935" />
-    <state width="865" height="146" key="GridCell.Tab.0.center/51.28.1869.1052/1920.0.1920.1080@51.28.1869.1052" timestamp="1582227826250" />
-    <state width="1495" height="259" key="GridCell.Tab.0.center/51.28.1869.1052@51.28.1869.1052" timestamp="1581977653200" />
-    <state width="1322" height="510" key="GridCell.Tab.0.left" timestamp="1582738245565">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state width="1322" height="510" key="GridCell.Tab.0.left/1920.0.1920.1080/51.28.1869.1052@51.28.1869.1052" timestamp="1582738245565" />
-    <state width="865" height="146" key="GridCell.Tab.0.left/51.28.1869.1052/1920.0.1920.1080@1920.0.1920.1080" timestamp="1582273617935" />
-    <state width="865" height="146" key="GridCell.Tab.0.left/51.28.1869.1052/1920.0.1920.1080@51.28.1869.1052" timestamp="1582227826250" />
-    <state width="1495" height="259" key="GridCell.Tab.0.left/51.28.1869.1052@51.28.1869.1052" timestamp="1581977653200" />
-    <state width="1322" height="510" key="GridCell.Tab.0.right" timestamp="1582738245565">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state width="1322" height="510" key="GridCell.Tab.0.right/1920.0.1920.1080/51.28.1869.1052@51.28.1869.1052" timestamp="1582738245565" />
-    <state width="865" height="146" key="GridCell.Tab.0.right/51.28.1869.1052/1920.0.1920.1080@1920.0.1920.1080" timestamp="1582273617936" />
-    <state width="865" height="146" key="GridCell.Tab.0.right/51.28.1869.1052/1920.0.1920.1080@51.28.1869.1052" timestamp="1582227826250" />
-    <state width="1495" height="259" key="GridCell.Tab.0.right/51.28.1869.1052@51.28.1869.1052" timestamp="1581977653200" />
-    <state x="504" y="170" width="962" height="737" key="SettingsEditor" timestamp="1581890424571">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="504" y="170" width="962" height="737" key="SettingsEditor/51.28.1869.1052@51.28.1869.1052" timestamp="1581890424571" />
-    <state x="624" y="232" width="720" height="678" key="search.everywhere.popup" timestamp="1581967106476">
-      <screen x="51" y="28" width="1869" height="1052" />
-    </state>
-    <state x="624" y="232" width="720" height="678" key="search.everywhere.popup/51.28.1869.1052@51.28.1869.1052" timestamp="1581967106476" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/_index.js</url>
-          <line>99</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/_index.js</url>
-          <line>98</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <option name="version" value="3" />
   </component>
 </project>
