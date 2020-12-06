@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "start:new": "node app-new.js"
   },
   "keywords": [],
   "author": "",
