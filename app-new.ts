@@ -5,6 +5,7 @@ const RandomInt = (max) => Math.floor(Math.random() * max);
 const getInitialValue = () => RandomInt(2) * 2 + 2;
 
 class Point {
+    public value: Number;
     constructor(val = 0) {
         this.value = val;
     }
@@ -13,13 +14,16 @@ class Point {
     }
 }
 
-const getEmptyArray = (size, Value) => Array(size).fill(null).map(() => Value ? new Value() : undefined);
+const getEmptyArray = (size, Value?: <T>) => Array(size).fill(null).map(() => Value ? new Value() : undefined);
 
 class Game {
+    private areaWidth: Number,
+    private areaHeight: Number;
+    private area: [[Point]];
     constructor(w = DEFAULT_SIZE, h = DEFAULT_SIZE) {
         this.areaWidth = w;
-        this.areaHeigh = h;
-        this.area = getEmptyArray(this.areaHeigh).map(() => getEmptyArray(this.areaWidth, Point));
+        this.areaHeight = h;
+        this.area = getEmptyArray(this.areaHeight).map(() => getEmptyArray(this.areaWidth, Point));
     }
     renderConsole(clear = false) {
         if (clear) {
@@ -36,7 +40,7 @@ class Game {
     };
 
     addRandomPoint () {
-        const yCord = RandomInt(this.areaHeigh);
+        const yCord = RandomInt(this.areaHeight);
         const xCord = RandomInt(this.areaWidth);
         const target = this.area[yCord][xCord];
         if (target.value) {
@@ -65,8 +69,8 @@ class Game {
         const getNewCords = ([x, y], d) => {
             const newX = x + directions[d][0];
             const newY = y + directions[d][1];
-            if(newX < 0 || newX > this.areaHeigh) return;
-            if(newY < 0 || newY > this.areaHeigh) return;
+            if(newX < 0 || newX > this.areaHeight) return;
+            if(newY < 0 || newY > this.areaHeight) return;
             return [newX, newY];
         };
         for(let row in this.area) {
