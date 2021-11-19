@@ -1,4 +1,6 @@
 import * as readline from 'readline';
+import Point from "./point";
+import {getFilledArray, RandomInt} from "../helpers";
 
 const DEFAULT_SIZE = 4;
 
@@ -36,25 +38,10 @@ enum EConsoleColors {
     BgWhite = "\x1b[47m",
 }
 
-const RandomInt = (max:number) => Math.floor(Math.random() * max);
 
 const getInitialValue = () => RandomInt(1) * 2 + 2;
 
-class Point {
-    public value: number;
-    constructor(val = 0) {
-        this.value = val;
-    }
-    setVal (newVal:number) {
-        this.value = newVal;
-    }
-    static create() {
-        return new Point();
-    }
-}
 
-const getFilledArray = <T>(s:number, mapFn: () => T) =>
-    Array.from<T, T>({length: s}, mapFn);
 
 class Game {
     private readonly areaWidth: number;
@@ -179,8 +166,8 @@ class Game {
         return reverse
             ? [...this.makeNewBlankCells(source.length - filtered.length), ...filtered]
             : [...filtered, ...this.makeNewBlankCells(source.length - filtered.length)];
-        
-        
+
+
     }
 
     move(direction = EDirections.Up) {
@@ -281,8 +268,5 @@ class Game {
 
 }
 
-Game.start(4,4,false);
-
-
-
+export default Game;
 
