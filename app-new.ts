@@ -3,10 +3,10 @@ import * as readline from 'readline';
 const DEFAULT_SIZE = 4;
 
 enum EDirections {
-    Up,
-    Right,
-    Left,
-    Down,
+    Up = 'up',
+    Right = 'right',
+    Left = 'left',
+    Down = 'down',
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -36,30 +36,35 @@ enum EConsoleColors {
     BgWhite = "\x1b[47m",
 }
 
-const RandomInt = (max) => Math.floor(Math.random() * max);
+const RandomInt = (max:number) => Math.floor(Math.random() * max);
 
-const getInitialValue = () => RandomInt(0) * 2 + 2;
+const getInitialValue = () => RandomInt(1) * 2 + 2;
 
 class Point {
     public value: number;
     constructor(val = 0) {
         this.value = val;
     }
-    setVal (newVal) {
+    setVal (newVal:number) {
         this.value = newVal;
+    }
+    static create() {
+        return new Point();
     }
 }
 
-const getEmptyArray = <T>(size, Value?: { new(): T }) => Array(size).fill(null).map(() => Value ? new Value() : undefined);
+const getFilledArray = <T>(s:number, mapFn: () => T) =>
+    Array.from<T, T>({length: s}, mapFn);
 
 class Game {
     private readonly areaWidth: number;
     private readonly areaHeight: number;
     private readonly area: Point[][];
+    private isGameOver: boolean = false;
     constructor(w = DEFAULT_SIZE, h = DEFAULT_SIZE) {
         this.areaWidth = w;
         this.areaHeight = h;
-        this.area = getEmptyArray<null>(this.areaHeight).map(() => getEmptyArray<Point>(this.areaWidth, Point));
+        this.area = getFilledArray<Point[]>(h, () => getFilledArray<Point>(w, Point.create))
     }
     renderConsole(clear = false) {
         if (clear) {
@@ -106,17 +111,18 @@ class Game {
         console.log(result);
     };
 
-    addRandomPoint () {
-        const yCord = RandomInt(this.areaHeight);
-        const xCord = RandomInt(this.areaWidth);
-        const target = this.area[yCord][xCord];
-        if (target.value) {
-            return this.addRandomPoint();
+    addRandomPoint ():boolean {
+        const blankMap = this.area.flat().filter((point) => !point.value);
+        if (blankMap.length === 0) {
+            return false;
         }
-        this.area[yCord][xCord] = new Point(getInitialValue());
+        const targetIndex = RandomInt(blankMap.length - 1);
+        const target = blankMap[targetIndex];
+        target.setVal(getInitialValue());
+        return true;
     }
 
-    makeNewBlankCells = (size:number) => getEmptyArray(size, Point);
+    makeNewBlankCells = (size:number) => getFilledArray(size, Point.create);
 
     moveInRow(rowIndex:number, reverse: boolean) {
         const row = this.area[rowIndex];
@@ -124,8 +130,10 @@ class Game {
         this.area[rowIndex] = this.moveInArray(row, reverse);
     }
 
+    selectCol = (colIndex:number) => this.area.map((row, cord) => this.area[cord][colIndex]);
+
     moveInCol(colIndex:number, reverse:boolean) {
-        const col = this.area.map((row, cord) => this.area[cord][colIndex]);
+        const col = this.selectCol(colIndex);
 
         const result = this.moveInArray(col, reverse);
 
@@ -176,56 +184,105 @@ class Game {
     }
 
     move(direction = EDirections.Up) {
-
         if(direction === EDirections.Left || direction === EDirections.Right) {
-            for (let x = 0; x < this.areaHeight; x++ ) {
-                this.moveInRow(x, direction === EDirections.Right);
+            for (let y = 0; y < this.areaHeight; y++ ) {
+                this.moveInRow(y, direction === EDirections.Right);
             }
         } else {
-            for(let y = 0; y < this.areaWidth; y++) {
-                this.moveInCol(y, direction === EDirections.Down);
+            for(let x = 0; x < this.areaWidth; x++) {
+                this.moveInCol(x, direction === EDirections.Down);
+            }
+        }
+    }
+
+    checkNeighbors(list: Point[]):boolean {
+        return list.slice(0,-1).some((target, index) => target.value === list[index + 1].value )
+    }
+
+    checkInCol = (index: number):boolean => this.checkNeighbors(this.selectCol(index));
+    checkInRow = (index: number):boolean => this.checkNeighbors(this.area[index]);
+
+    checkGameOver():boolean {
+        for (let y = 0; y < this.areaHeight; y++ ) {
+            if (this.checkInRow(y)) {
+                return false;
             }
         }
 
-        // this.addRandomPoint();
+        for (let x = 0; x < this.areaWidth; x++) {
+            if (this.checkInCol(x)) {
+                return false;
+            }
+        }
+
+        return true;
     }
+
+    gameOver() {
+        console.log('Yor game is over!');
+        process.exit();
+    }
+
+    loop(direction: EDirections, debug?:boolean):void {
+        if(this.isGameOver)
+            return;
+
+        const oldState = JSON.stringify(this.area);
+        this.move(direction);
+        const newState = JSON.stringify(this.area);
+
+
+        const didChange = oldState !== newState;
+        let newAdded = false;
+
+        if (didChange) {
+            newAdded = this.addRandomPoint();
+        }
+
+        if(newAdded) {
+            this.renderConsole(!debug);
+            return;
+        }
+
+        if (this.checkGameOver()) {
+            this.isGameOver = true;
+            this.gameOver();
+        }
+    }
+
+    attachEventListener(debug?: boolean) {
+        readline.emitKeypressEvents(process.stdin);
+
+        if (process.stdin.isTTY)
+            process.stdin.setRawMode(true);
+
+        process.stdin.on('keypress', (chunk, key) => {
+            if(Object.values(EDirections).includes(key.name)) {
+                this.loop(key.name, debug);
+            } else if (key.name === 'q') {
+                process.exit();
+            }
+
+            if(debug)
+                console.log({key: key.name});
+        });
+    }
+
+    static start(w?:number, h?:number, debug?: boolean): Game {
+        const game = new Game(w, h);
+
+        game.addRandomPoint();
+        game.renderConsole(!debug);
+        game.attachEventListener(debug);
+
+
+        return game;
+    }
+
 }
 
-const newGame = new Game(4, 4);
-newGame.addRandomPoint();
-// newGame.addRandomPoint();
-// newGame.addRandomPoint();
-// newGame.addRandomPoint();
-// newGame.addRandomPoint();
-// newGame.addRandomPoint();
-// newGame.addRandomPoint();
-newGame.renderConsole(true);
+Game.start(4,4,false);
 
 
-readline.emitKeypressEvents(process.stdin);
 
-if (process.stdin.isTTY)
-    process.stdin.setRawMode(true);
-
-process.stdin.on('keypress', (chunk, key) => {
-    switch (key.name) {
-        case 'up':
-            newGame.move(EDirections.Up);
-            break;
-        case 'down':
-            newGame.move(EDirections.Down);
-            break;
-        case 'left':
-            newGame.move(EDirections.Left);
-            break;
-        case 'right':
-            newGame.move(EDirections.Right);
-            break;
-        case 'q':
-            process.exit();
-            break;
-    }
-
-    newGame.renderConsole(true);
-});
 
