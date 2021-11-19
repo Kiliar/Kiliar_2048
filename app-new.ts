@@ -1,3 +1,5 @@
+import * as readline from 'readline';
+
 const DEFAULT_SIZE = 4;
 
 enum EDirections {
@@ -7,6 +9,7 @@ enum EDirections {
     Down,
 }
 
+// noinspection JSUnusedGlobalSymbols
 enum EConsoleColors {
     Reset = "\x1b[0m",
     Bright = "\x1b[1m",
@@ -33,8 +36,6 @@ enum EConsoleColors {
     BgWhite = "\x1b[47m",
 }
 
-type TCords = [x: number, y: number];
-
 const RandomInt = (max) => Math.floor(Math.random() * max);
 
 const getInitialValue = () => RandomInt(0) * 2 + 2;
@@ -58,7 +59,7 @@ class Game {
     constructor(w = DEFAULT_SIZE, h = DEFAULT_SIZE) {
         this.areaWidth = w;
         this.areaHeight = h;
-        this.area = getEmptyArray(this.areaHeight).map(() => getEmptyArray<Point>(this.areaWidth, Point));
+        this.area = getEmptyArray<null>(this.areaHeight).map(() => getEmptyArray<Point>(this.areaWidth, Point));
     }
     renderConsole(clear = false) {
         if (clear) {
@@ -81,6 +82,19 @@ class Game {
                     case 4:
                         color = EConsoleColors.FgMagenta;
                         break;
+                    case 8:
+                        color = EConsoleColors.FgBlue;
+                        break;
+                    case 16:
+                        color = EConsoleColors.FgBlue;
+                        break;
+                    case 32:
+                        color = EConsoleColors.FgYellow;
+                        break;
+                    case 64:
+                        color = EConsoleColors.FgGreen;
+                        break;
+
                 }
 
                 result+=` ${color}${val.value}${EConsoleColors.Reset} |`;
@@ -102,83 +116,116 @@ class Game {
         this.area[yCord][xCord] = new Point(getInitialValue());
     }
 
+    makeNewBlankCells = (size:number) => getEmptyArray(size, Point);
+
+    moveInRow(rowIndex:number, reverse: boolean) {
+        const row = this.area[rowIndex];
+
+        this.area[rowIndex] = this.moveInArray(row, reverse);
+    }
+
+    moveInCol(colIndex:number, reverse:boolean) {
+        const col = this.area.map((row, cord) => this.area[cord][colIndex]);
+
+        const result = this.moveInArray(col, reverse);
+
+        result.forEach((point, cord) => {
+            this.area[cord][colIndex] = point;
+        });
+
+    }
+
+    moveInArray(source:Point[], reverse:boolean) {
+        const filtered = source.filter(({value}) => value);
+
+        if (reverse) {
+            filtered.reverse();
+        }
+
+
+        if(!filtered.length) {
+            return source;
+        }
+
+        //merge in filtered
+        for (let cord = 0; cord < filtered.length; cord++) {
+            const current = filtered[cord];
+            const next = filtered[cord + 1];
+
+            if(!next) {
+                continue;
+            }
+
+            if(next.value !== current.value) {
+                continue;
+            }
+
+            current.setVal(current.value * 2);
+            filtered.splice(cord + 1, 1);
+        }
+
+        if (reverse) {
+            filtered.reverse();
+        }
+
+        return reverse
+            ? [...this.makeNewBlankCells(source.length - filtered.length), ...filtered]
+            : [...filtered, ...this.makeNewBlankCells(source.length - filtered.length)];
+        
+        
+    }
+
     move(direction = EDirections.Up) {
-        const collision = (current: Point, target: Point) => {
-            if (!target.value || !current.value) return;
-            if (target.value === current.value) {
-                target.setVal(target.value*2)
-                current.setVal(0)
-            }
-        }
 
-        const movePont = ([origX, origY]: TCords, [toX, toY]: TCords) => {
-            let current = this.area[origX][origY];
-            let target = this.area[toX][toY]
-            if( target.value || !current.value ) {
-                collision(current, target)
-                return;
-            }
-            // console.log({point, target});
-            target.setVal(current.value);
-            current.setVal(0);
-        }
-
-        const directions = [
-            [-1,0], //Up
-            [0,1],  //Right
-            [0,-1], // Left
-            [1,0]  // Down
-        ];
-
-        const getNewCords = ([x, y]:TCords, d:EDirections):TCords => {
-            const newX = x + directions[d][0];
-            const newY = y + directions[d][1];
-            if(newX < 0 || newX >= this.areaWidth) return;
-            if(newY < 0 || newY >= this.areaHeight) return;
-            return [newX, newY];
-        };
-
-        const foo = (y: number, x: number, direction: EDirections) => {
-            const curCords:TCords = [x, y];
-            const newCords = getNewCords(curCords, direction);
-            if(!newCords) return;
-            // console.log({curCords, newCords});
-            movePont(curCords, newCords);
-        }
-
-        if (direction === EDirections.Right || direction === EDirections.Down) {
-            for(let row in this.area) {
-                for(let col in this.area[row]) {
-                    foo(+row, +col, direction);
-                }
+        if(direction === EDirections.Left || direction === EDirections.Right) {
+            for (let x = 0; x < this.areaHeight; x++ ) {
+                this.moveInRow(x, direction === EDirections.Right);
             }
         } else {
-            for(let row = this.areaHeight; --row; row >= 0) {
-                for(let col = this.areaWidth; --col; col >= 0) {
-                    foo(+row, +col, direction);
-                }
+            for(let y = 0; y < this.areaWidth; y++) {
+                this.moveInCol(y, direction === EDirections.Down);
             }
         }
+
+        // this.addRandomPoint();
     }
 }
-const a = 4;
 
-const newGame = new Game(a,a);
-// newGame.renderConsole(true);
+const newGame = new Game(4, 4);
 newGame.addRandomPoint();
-newGame.addRandomPoint();
-newGame.addRandomPoint();
-newGame.addRandomPoint();
-newGame.addRandomPoint();
-newGame.renderConsole(false);
-newGame.move(EDirections.Up);
-newGame.renderConsole(false);
-newGame.move(EDirections.Right);
-newGame.renderConsole(false);
-newGame.move(EDirections.Down);
-newGame.renderConsole(false);
-newGame.move(EDirections.Left);
+// newGame.addRandomPoint();
+// newGame.addRandomPoint();
+// newGame.addRandomPoint();
+// newGame.addRandomPoint();
+// newGame.addRandomPoint();
+// newGame.addRandomPoint();
+newGame.renderConsole(true);
 
 
-newGame.renderConsole(false);
+readline.emitKeypressEvents(process.stdin);
+
+if (process.stdin.isTTY)
+    process.stdin.setRawMode(true);
+
+process.stdin.on('keypress', (chunk, key) => {
+    switch (key.name) {
+        case 'up':
+            newGame.move(EDirections.Up);
+            break;
+        case 'down':
+            newGame.move(EDirections.Down);
+            break;
+        case 'left':
+            newGame.move(EDirections.Left);
+            break;
+        case 'right':
+            newGame.move(EDirections.Right);
+            break;
+        case 'q':
+            process.exit();
+            break;
+    }
+
+    newGame.renderConsole(true);
+});
 
