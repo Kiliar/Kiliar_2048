@@ -1,42 +1,8 @@
 import * as readline from 'readline';
 import Point from "./point";
 import {getFilledArray, RandomInt} from "../helpers";
-
-const DEFAULT_SIZE = 4;
-
-enum EDirections {
-    Up = 'up',
-    Right = 'right',
-    Left = 'left',
-    Down = 'down',
-}
-
-// noinspection JSUnusedGlobalSymbols
-enum EConsoleColors {
-    Reset = "\x1b[0m",
-    Bright = "\x1b[1m",
-    Dim = "\x1b[2m",
-    Underscore = "\x1b[4m",
-    Blink = "\x1b[5m",
-    Reverse = "\x1b[7m",
-    Hidden = "\x1b[8m",
-    FgBlack = "\x1b[30m",
-    FgRed = "\x1b[31m",
-    FgGreen = "\x1b[32m",
-    FgYellow = "\x1b[33m",
-    FgBlue = "\x1b[34m",
-    FgMagenta = "\x1b[35m",
-    FgCyan = "\x1b[36m",
-    FgWhite = "\x1b[37m",
-    BgBlack = "\x1b[40m",
-    BgRed = "\x1b[41m",
-    BgGreen = "\x1b[42m",
-    BgYellow = "\x1b[43m",
-    BgBlue = "\x1b[44m",
-    BgMagenta = "\x1b[45m",
-    BgCyan = "\x1b[46m",
-    BgWhite = "\x1b[47m",
-}
+import {DEFAULT_SIZE, EDirections} from "../helpers/constants";
+import Console from "../console";
 
 
 const getInitialValue = () => RandomInt(1) * 2 + 2;
@@ -48,54 +14,15 @@ class Game {
     private readonly areaHeight: number;
     private readonly area: Point[][];
     private isGameOver: boolean = false;
+    private Renderer: Console;
     constructor(w = DEFAULT_SIZE, h = DEFAULT_SIZE) {
         this.areaWidth = w;
         this.areaHeight = h;
         this.area = getFilledArray<Point[]>(h, () => getFilledArray<Point>(w, Point.create))
+        this.Renderer = new Console(h);
     }
     renderConsole(clear = false) {
-        if (clear) {
-            console.clear();
-        }
-
-        let result = '';
-
-        for(let row in this.area) {
-            for(let col in this.area[row]) {
-                const val = this.area[row][col];
-                let color = EConsoleColors.Reset;
-                switch (val.value) {
-                    case 0:
-                        color = EConsoleColors.FgBlack;
-                        break;
-                    case 2:
-                        color = EConsoleColors.FgGreen;
-                        break;
-                    case 4:
-                        color = EConsoleColors.FgMagenta;
-                        break;
-                    case 8:
-                        color = EConsoleColors.FgBlue;
-                        break;
-                    case 16:
-                        color = EConsoleColors.FgBlue;
-                        break;
-                    case 32:
-                        color = EConsoleColors.FgYellow;
-                        break;
-                    case 64:
-                        color = EConsoleColors.FgGreen;
-                        break;
-
-                }
-
-                result+=` ${color}${val.value}${EConsoleColors.Reset} |`;
-
-
-            }
-            result+='\n';
-        }
-        console.log(result);
+        this.Renderer.render(this.area, clear);
     };
 
     addRandomPoint ():boolean {
@@ -258,6 +185,9 @@ class Game {
     static start(w?:number, h?:number, debug?: boolean): Game {
         const game = new Game(w, h);
 
+        game.addRandomPoint();
+        game.addRandomPoint();
+        game.addRandomPoint();
         game.addRandomPoint();
         game.renderConsole(!debug);
         game.attachEventListener(debug);
